@@ -15,6 +15,16 @@
             <h1 class="hero-title">Hello Gallery</h1>
             <button class="language" id="en">EN</button>
             <button class="language" id="uk">UK</button>
+            <form class="auth-form" id="auth-form">
+                <label>Email</label>
+                <input type="email" id="email">
+                <label>Пароль</label>
+                <input type="password" id="password">
+                <button type="submit" id="sign">Вхід</button>
+                <button type="submit" id="register">Реєстрація</button>
+                <button type="submit" id="status">Статус</button>
+                <button type="submit" id="favorite">додати до обраного</button>
+            </form>
             <div class="pages">
             </div>
             <ul class="gallery">
@@ -23,6 +33,7 @@
     </section>
 
     <script src="./index.js" type="module"></script>
+    <script src="./js/auth.js" type="module"></script>
 </body>
 
 </html>
