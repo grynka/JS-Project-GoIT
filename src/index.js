@@ -1,5 +1,6 @@
 import FilmApiTrendFetch from "./js/serviceApiFilmTrend";
 import card from './templates/card.hbs'
+import auth from './js/auth.js'
 
 const gallery = document.querySelector('.gallery');
 const btnEn = document.querySelector('#en');
