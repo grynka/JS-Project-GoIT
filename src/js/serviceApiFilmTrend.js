@@ -26,9 +26,13 @@ export default class FilmApiTrendFetch {
         return await fetch(
             `${TRENDING_URL}?api_key=${API_KEY}&${this.page}&language=${this.currentLang}`
         )
-            .then(res => res.json())
-            .then(data => {
+            .then(
+                res => res.json()
+            )
+                .then(
+                    data => {
                 this.films = data.results
+                console.log(data.results[1])
                 //    return data.results
             })
             .catch(err => console.log(err));

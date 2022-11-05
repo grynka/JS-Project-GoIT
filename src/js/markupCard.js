@@ -1,5 +1,5 @@
 export default function card(data) {
-    return data.results.map(item => ` <li class='card'>
+      return data.results.map(item => ` <li class='card' id=${item.id}>
     <div class='front'>
       <img
         src='https://image.tmdb.org/t/p/w342${item.poster_path}'
@@ -16,7 +16,8 @@ export default function card(data) {
     </div>
     <div class='back'>
       <p class='back-text'>${item.overview}</p>
-      <button type='button' id='${item.id}'>Add to libriary</button>
+      <button type="submit" id="addFavorite">Додати до обраного</button>
+      <button type="submit" id="addWatched">Додати до проглянутого</button>
     </div>
   </li>`).join('')
 }
