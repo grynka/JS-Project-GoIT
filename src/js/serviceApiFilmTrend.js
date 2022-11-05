@@ -32,7 +32,7 @@ export default class FilmApiTrendFetch {
                 .then(
                     data => {
                 this.films = data.results
-                console.log(data.results[1])
+                console.log(data.results)
                 //    return data.results
             })
             .catch(err => console.log(err));

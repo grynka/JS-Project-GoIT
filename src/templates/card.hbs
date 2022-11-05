@@ -17,9 +17,9 @@
     <div class='back'>
       <p class='back-text'>{{overview}}</p>
       <div class="buttons" id="buttons">
-      <button type="submit" name='addFavorite' id={{this.id}}>Додати до обраного</button>
+      <button type="submit" name='addFavorite' id={{this.id}} data-card='"id" : "{{this.id}}", "poster_path" : "{{poster_path}}", "title" : "{{title}}", "genre_ids" : "{{genre_ids}}", "relesedate" : "{{release_date}}", "vote_average" : "{{vote_average}}", "overview" : "{{overview}}"'>Додати до обраного</button>
       <button type='submit' name='delFavorite' id={{this.id}}>Выдалити з обраного</button>
-      <button type="submit" name='addWatched' id={{this.id}}>Додати до проглянутого</button>
+      <button type="submit" name='addWatched' id={{this.id}} data-card='"id" : "{{this.id}}", "poster_path" : "{{poster_path}}", "title" : "{{title}}", "genre_ids" : "{{genre_ids}}", "relesedate" : "{{release_date}}", "vote_average" : "{{vote_average}}", "overview" : "{{overview}}"'>Додати до проглянутого</button>
       <button type="submit" name='delWatched' id={{this.id}}>Выдалити з проглянутого</button>
     </div>
     </div>

@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import card from '../templates/card.hbs'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile , onAuthStateChanged, signOut} from "firebase/auth";
 // Import the functions you need from the SDKs you need
 
@@ -27,12 +28,12 @@ function itemAction(event) {
   if (event.target.name === 'addFavorite') {
     console.log("сработало " + event.target.id, event.target.name)
     delItem(event.target.id, uid, "watched")
-    setList("favorite", uid, event.target.id)
+    setList("favorite", uid, event.target.id, event.target.dataset.card)
     }
     else if (event.target.name === 'addWatched') {
       console.log("сработало " + event.target.id, event.target.name)
       delItem(event.target.id, uid, "favorite")
-      setList("watched", uid, event.target.id)
+      setList("watched", uid, event.target.id, event.target.dataset.card)
 }
     else if (event.target.name === 'delFavorite') {
     console.log("сработало " + event.target.name)
@@ -62,10 +63,6 @@ function cabinetAction(event) {
       authOut()
       event.submitter.disabled = true;
   }
-    else if (event.submitter.name === 'addFavorite') {
-    console.log("сработало " + event.submitter.id, event.submitter.name)
-  setList("favorite", uid)
-    }
 else if (event.submitter.id === 'favorite') {
   console.log(uid)
 getList("favorite", uid)
@@ -86,13 +83,18 @@ function getList(category, user) {
   };
   
   fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${user}/${category}.json`, requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
+    .then(response => response.json())
+    .then(result => {
+      console.log(result)
+        document.querySelector(`.${category}`).innerHTML = '';
+            document.querySelector(`.${category}`).insertAdjacentHTML('beforeend', card(result));
+    })
     .catch(error => console.log('error', error));
 }
 
-function setList(category, user, itemId) {
-  const raw = `{"${itemId}" : "обьект фильма"}`;
+function setList(category, user, itemId, card) {
+  console.log(card)
+  const raw = `{"${itemId}" : {${card}}}`;
 //
   const requestOptions = {
     method: 'PATCH',
