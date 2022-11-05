@@ -57,6 +57,11 @@ else if (event.submitter.id === 'watched') {
 getList("watched", uid)
 setPage("watched", uid)
 }
+
+else if (event.submitter.id === 'delete') {
+  console.log(uid)
+delItem(event.submitter.id, uid)
+}
 }
 
 function getList(category, user) {
@@ -91,6 +96,21 @@ function setPage(category, user) {
 //
   const requestOptions = {
     method: 'PATCH',
+    body: raw,
+    redirect: 'follow'
+  };
+  
+  fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${user}.json`, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+}
+
+function delItem(utemID, user) {
+  const raw = `{"page" : "${category}"}`;
+//
+  const requestOptions = {
+    method: 'DELETE',
     body: raw,
     redirect: 'follow'
   };
