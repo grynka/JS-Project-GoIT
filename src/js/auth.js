@@ -16,6 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 let uid;
+let username;
 authStatus();
 
 document.getElementById('auth-form').addEventListener('submit', cabinetAction)
@@ -34,9 +35,14 @@ function itemAction(event) {
       delItem(event.target.id, uid, "favorite")
       setList("watched", uid, event.target.id)
 }
-    else if (event.target.name === 'delete') {
+    else if (event.target.name === 'delFavorite') {
     console.log("сработало " + event.target.name)
     delItem(event.target.id, uid, "favorite")
+  }
+
+  else if (event.target.name === 'delWatched') {
+    console.log("сработало " + event.target.name)
+    delItem(event.target.id, uid, "watched")
   }
 }
 
@@ -139,8 +145,9 @@ const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
     if (user) {
   uid = user.uid
+  document.querySelector('.username').textContent = user.name
   console.log("користувач " + uid)
-  return  uid;
+  return  uid, document.querySelector('.username').textContent = user.email;
 
 
     } else {
@@ -158,6 +165,7 @@ function authFormSend(email, password) {
         // Signed in 
         const user = userCredential.user;
         console.log("Вхід успішний " + userCredential.user.email)
+        document.querySelector('.username').textContent = user.email
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -173,6 +181,7 @@ createUserWithEmailAndPassword(auth, email, password)
     // Signed in 
     const user = userCredential.user;
     console.log("Користувача успішно створено " + userCredential.user.email)
+    document.querySelector('.username').textContent = user.email
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -184,6 +193,7 @@ createUserWithEmailAndPassword(auth, email, password)
 function authOut() {
   const auth = getAuth();
 signOut(auth).then(() => {
+  document.querySelector('.username').textContent = user.email
   console.log("Вихід виконано")
 }).catch((error) => {
   // An error happened.
