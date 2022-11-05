@@ -16,8 +16,9 @@
     </div>
     <div class='back'>
       <p class='back-text'>{{overview}}</p>
-      <button type='button' id='{{genres.id}}'>Add to libriary</button>
-      
+      <button type="submit" name='addFavorite' id={{this.id}}>Add to libriary</button>
+      <button type='submit' name='delete' id={{this.id}}>Выдалити</button>
+      <button type="submit" name='addWatched' id={{this.id}}>Додати до проглянутого</button>
     </div>
   </li>
 {{/each}}

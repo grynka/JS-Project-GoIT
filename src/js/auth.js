@@ -18,10 +18,31 @@ const app = initializeApp(firebaseConfig);
 let uid;
 authStatus();
 
-document.getElementById('auth-form').addEventListener('submit', auth)
+document.getElementById('auth-form').addEventListener('submit', cabinetAction)
+document.getElementById('gallery').addEventListener('click', itemAction)
 
-function auth(event) {
+function itemAction(event) {
+  event.preventDefault();
+  console.log("нажато " + event.target.name)
+  if (event.target.name === 'addFavorite') {
+    console.log("сработало " + event.target.id, event.target.name)
+    delItem(event.target.id, uid, "watched")
+    setList("favorite", uid, event.target.id)
+    }
+    else if (event.target.name === 'addWatched') {
+      console.log("сработало " + event.target.id, event.target.name)
+      delItem(event.target.id, uid, "favorite")
+      setList("watched", uid, event.target.id)
+}
+    else if (event.target.name === 'delete') {
+    console.log("сработало " + event.target.name)
+    delItem(event.target.id, uid, "favorite")
+  }
+}
+
+function cabinetAction(event) {
     event.preventDefault();
+    console.log(event.target.name)
     const email = event.target.querySelector('#email').value
     const password = event.target.querySelector('#password').value
     if (event.submitter.id === 'sign') {
@@ -36,17 +57,10 @@ function auth(event) {
       authOut()
       event.submitter.disabled = true;
   }
-    else if (event.submitter.id === 'status') {
-        authStatus()
-    }
-    else if (event.submitter.id === 'addFavorite') {
-    console.log(uid)
+    else if (event.submitter.name === 'addFavorite') {
+    console.log("сработало " + event.submitter.id, event.submitter.name)
   setList("favorite", uid)
     }
-    else if (event.submitter.id === 'addWatched') {
-      console.log(uid)
-  setList("watched", uid)
-}
 else if (event.submitter.id === 'favorite') {
   console.log(uid)
 getList("favorite", uid)
@@ -58,10 +72,6 @@ getList("watched", uid)
 setPage("watched", uid)
 }
 
-else if (event.submitter.id === 'delete') {
-  console.log(uid)
-delItem(event.submitter.id, uid)
-}
 }
 
 function getList(category, user) {
@@ -76,8 +86,8 @@ function getList(category, user) {
     .catch(error => console.log('error', error));
 }
 
-function setList(category, user) {
-  const raw = `{"${JSON.stringify(Math.floor(Math.random() * 1000000))}" : "${user}"}`;
+function setList(category, user, itemId) {
+  const raw = `{"${itemId}" : "обьект фильма"}`;
 //
   const requestOptions = {
     method: 'PATCH',
@@ -89,6 +99,7 @@ function setList(category, user) {
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
+    console.log(itemId + " успешно добавлено в " + category)
 }
 
 function setPage(category, user) {
@@ -106,19 +117,18 @@ function setPage(category, user) {
     .catch(error => console.log('error', error));
 }
 
-function delItem(itemId, user) {
-  const raw = `{"page" : "${category}"}`;
-//
+function delItem(itemId, user, category) {
+
   const requestOptions = {
     method: 'DELETE',
-    body: raw,
     redirect: 'follow'
   };
   
-  fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${user}/${itemId}.json`, requestOptions)
+  fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${user}/${category}/${itemId}.json`, requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
+    console.log(itemId + " успешно удалено")
 }
 
 
@@ -129,7 +139,7 @@ const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
     if (user) {
   uid = user.uid
-  console.log(uid)
+  console.log("користувач " + uid)
   return  uid;
 
 
