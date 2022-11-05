@@ -16,15 +16,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 let uid;
-let username;
 authStatus();
 
 document.getElementById('auth-form').addEventListener('submit', cabinetAction)
-document.getElementById('main').addEventListener('click', itemAction)
+document.getElementById('gallery').addEventListener('click', itemAction)
 
 function itemAction(event) {
   event.preventDefault();
-  console.log("нажато " + event.target.name)
+  console.log("нажато " + event.target.name + event.target.id)
   if (event.target.name === 'addFavorite') {
     console.log("сработало " + event.target.id, event.target.name)
     delItem(event.target.id, uid, "watched")
