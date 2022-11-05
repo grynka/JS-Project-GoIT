@@ -16,10 +16,12 @@
     </div>
     <div class='back'>
       <p class='back-text'>{{overview}}</p>
+      <div class="buttons" id="buttons">
       <button type="submit" name='addFavorite' id={{this.id}}>Додати до обраного</button>
       <button type='submit' name='delFavorite' id={{this.id}}>Выдалити з обраного</button>
       <button type="submit" name='addWatched' id={{this.id}}>Додати до проглянутого</button>
-      <button type="submit" name='delWatched' id={{this.id}}>Выдалити з обраного</button>
+      <button type="submit" name='delWatched' id={{this.id}}>Выдалити з проглянутого</button>
+    </div>
     </div>
   </li>
 {{/each}}

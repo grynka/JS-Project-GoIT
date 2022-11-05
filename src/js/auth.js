@@ -20,7 +20,7 @@ let username;
 authStatus();
 
 document.getElementById('auth-form').addEventListener('submit', cabinetAction)
-document.getElementById('gallery').addEventListener('click', itemAction)
+document.getElementById('main').addEventListener('click', itemAction)
 
 function itemAction(event) {
   event.preventDefault();
