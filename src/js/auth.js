@@ -106,7 +106,7 @@ function setPage(category, user) {
     .catch(error => console.log('error', error));
 }
 
-function delItem(utemID, user) {
+function delItem(itemId, user) {
   const raw = `{"page" : "${category}"}`;
 //
   const requestOptions = {
@@ -115,7 +115,7 @@ function delItem(utemID, user) {
     redirect: 'follow'
   };
   
-  fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${user}.json`, requestOptions)
+  fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${user}/${itemId}.json`, requestOptions)
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
