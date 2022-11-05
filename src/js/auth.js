@@ -1,8 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import 'firebaseui/dist/firebaseui.css'
-import { } from 'firebase/database';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile , onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile , onAuthStateChanged, signOut} from "firebase/auth";
 // Import the functions you need from the SDKs you need
 
 const firebaseConfig = {
@@ -18,6 +15,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+let uid;
+authStatus();
 
 document.getElementById('auth-form').addEventListener('submit', auth)
 
@@ -32,29 +31,47 @@ function auth(event) {
     else if (event.submitter.id === 'register') {
         authFormReg(email, password)
         event.submitter.disabled = true;
-
     }
+    else if (event.submitter.id === 'exit') {
+      authOut()
+      event.submitter.disabled = true;
+  }
     else if (event.submitter.id === 'status') {
         authStatus()
     }
     else if (event.submitter.id === 'favorite') {
-        addFavorite(event.submitter.id)
+    console.log(uid)
+addFavorite(event.submitter.id, uid)
+//getFavorite(event.submitter.id, uid)
     }
 
 }
 
+function getFavorite(category, id) {
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  
+  fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${id}/${category}.json`, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+}
 
-function addFavorite(id) {
-const auth = getAuth();
-updateProfile(auth.currentUser, {
-  displayName: "Jane Q. User", photoURL: "https://example.com/jane-q-user/profile.jpg"
-}).then(() => {
-  // Profile updated!
-  console.log(uid)
-}).catch((error) => {
-  // An error occurred
-  // ...
-});
+function addFavorite(category, id) {
+  const raw = JSON.stringify(category);
+
+  const requestOptions = {
+    method: 'PUT',
+    body: raw,
+    redirect: 'follow'
+  };
+  
+  fetch(`https://my-project-1521664687668-default-rtdb.europe-west1.firebasedatabase.app/usersid/${id}/${category}.json`, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
 }
 
 
@@ -62,10 +79,11 @@ function authStatus() {
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      const uid = user.uid;
-      console.log(uid)
+  uid = user.uid
+  console.log(uid)
+  return  uid;
+
+
     } else {
         console.log("вхід не виконано")
         // ...
@@ -104,39 +122,11 @@ createUserWithEmailAndPassword(auth, email, password)
   });
 }
 
-
-let ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-const uiConfig = {
-  callbacks: {
-    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-      // User successfully signed in.
-      // Return type determines whether we continue the redirect automatically
-      // or whether we leave that to developer to handle.
-      return true;
-    },
-    uiShown: function() {
-      // The widget is rendered.
-      // Hide the loader.
-      document.getElementById('loader').style.display = 'none';
-    }
-  },
-  // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-  signInFlow: 'popup',
-  signInSuccessUrl: '/',
-  signInOptions: [
-    // Leave the lines as is for the providers you want to offer your users.
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-    firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-    firebase.auth.GithubAuthProvider.PROVIDER_ID,
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    firebase.auth.PhoneAuthProvider.PROVIDER_ID
-  ],
-  // Terms of service url.
-  tosUrl: '<your-tos-url>',
-  // Privacy policy url.
-  privacyPolicyUrl: '<your-privacy-policy-url>'
-};
-
-ui.start('#firebaseui-auth-container', uiConfig);
+function authOut() {
+  const auth = getAuth();
+signOut(auth).then(() => {
+  console.log("Sign-out successful.")
+}).catch((error) => {
+  // An error happened.
+});
+}
