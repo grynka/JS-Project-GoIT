@@ -62,7 +62,7 @@ function fetchFilmsTrailer(id) {
   .then(response =>  response.json())
   .then(result =>{ return result.results})
   .then(results => {console.log(results)
-return document.getElementById('trailers').insertAdjacentHTML('beforeend', results.map(item => 
+return document.getElementById(`trailers${id}`).insertAdjacentHTML('beforeend', results.map(item => 
   `<li><iframe width="560" height="315" src="https://www.youtube.com/embed/${item.key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></li>`))
  })
   .catch(error => console.log('error', error));
