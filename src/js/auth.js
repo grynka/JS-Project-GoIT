@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import card from '../templates/card.hbs'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile , onAuthStateChanged, signOut} from "firebase/auth";
+import axios from 'axios';
+
 // Import the functions you need from the SDKs you need
 
 const firebaseConfig = {
@@ -34,7 +36,9 @@ function itemAction(event) {
       console.log("сработало " + event.target.id, event.target.name)
       delItem(event.target.id, uid, "favorite")
       setList("watched", uid, event.target.id, event.target.dataset.card)
-}
+      fetchFilmsTrailer(event.target.id)
+    }
+
     else if (event.target.name === 'delFavorite') {
     console.log("сработало " + event.target.name)
     delItem(event.target.id, uid, "favorite")
@@ -44,6 +48,24 @@ function itemAction(event) {
     console.log("сработало " + event.target.name)
     delItem(event.target.id, uid, "watched")
   }
+  else if (event.target.name === 'trailer') {
+    console.log("сработало " + event.target.name)
+    fetchFilmsTrailer(event.target.id)
+
+  }
+
+}
+
+function fetchFilmsTrailer(id) {
+  console.log("запрос трейлера " + id)
+ return fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=2f44dbe234f7609a16da7327d83f3eb3`)
+  .then(response =>  response.json())
+  .then(result =>{ return result.results})
+  .then(results => {console.log(results)
+return document.getElementById('trailers').insertAdjacentHTML('beforeend', results.map(item => 
+  `<li><iframe width="560" height="315" src="https://www.youtube.com/embed/${item.key}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></li>`))
+ })
+  .catch(error => console.log('error', error));
 }
 
 function cabinetAction(event) {
@@ -75,6 +97,8 @@ setPage("watched", uid)
 }
 
 }
+
+
 
 function getList(category, user) {
   const requestOptions = {
